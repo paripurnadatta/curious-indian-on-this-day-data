@@ -1,13 +1,35 @@
-# Dataset schema v1
+# Dataset schema v2
 
-`events.json` is an object with:
+The production sync format is sharded by month. `manifest.json` is the entry point.
 
-- `schema_version` — currently `1`.
+## Manifest
+
+Required top-level fields:
+
+- `schema_version` — currently `2`.
 - `dataset_version` — release string in `YYYY.MM.DD.REVISION` form.
 - `generated_at` — ISO-8601 timestamp.
-- `events` — array of event objects.
+- `minimum_plugin_version` — oldest plugin version allowed to consume the release.
+- `event_count` — total events across all shards.
+- `date_count` — unique month/day keys represented.
+- `linked_event_count` — covered events linked to Curious Indian.
+- `image_ready_count` — events with a WordPress attachment ID.
+- `canonical_events_path` and `canonical_events_sha256` — recovery/full-export artifact.
+- `sync_mode` — `monthly_shards`.
+- `shards` — one descriptor for each calendar month.
 
-Each event contains:
+Each shard descriptor contains `month`, `path`, `event_count`, and the SHA-256 of the exact JSON response body.
+
+## Monthly shard
+
+Each `events/MM.json` file contains:
+
+- `schema_version` — `2`.
+- `dataset_version` — must exactly match the manifest.
+- `month` — integer 1–12.
+- `events` — event records for that month only.
+
+## Event record
 
 | Field | Type | Meaning |
 |---|---|---|
@@ -28,4 +50,4 @@ Each event contains:
 | `image_source_url` | string | Original image/source page URL |
 | `image_credit` | string | Credit/license text shown where required |
 
-`manifest.json` contains the currently published dataset version, event/date counts, minimum plugin version and SHA-256 checksum of the exact `events.json` response body.
+The plugin validates all shards and the combined dataset before replacing the local WordPress copy.
