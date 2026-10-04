@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "dataset_version": "2026.10.04.1",
+  "generated_at": "2026-10-04T00:00:00+05:30",
+  "minimum_plugin_version": "0.4.0",
+  "event_count": 740,
+  "date_count": 366,
+  "linked_event_count": 128,
+  "image_ready_count": 129,
+  "events_path": "events.json",
+  "events_sha256": "feef7ca4e006481c786b0b36d72ac39f53bc56d11e88d923549a3cdc20a22359"
+}
